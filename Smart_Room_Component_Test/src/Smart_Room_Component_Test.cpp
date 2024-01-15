@@ -6,7 +6,7 @@
  */
 
 #include "Particle.h"
-const int TESTPIN = D8;
+const int TESTPIN = D15;
 bool test;
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
@@ -22,6 +22,6 @@ waitFor(Serial.isConnected, 10000);
 void loop() {
 
 test = digitalRead(TESTPIN);
-Serial.printf("The motion is %i\n", test);
+Serial.printf("The pin reads %i\n", test);
 
 }
