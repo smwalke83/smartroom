@@ -36,6 +36,8 @@ int neoColorTemp;
 int photoSum;
 int neoBrightness;
 int photoAVG;
+int currentTime;
+int lastSecond;
 int n; int x; int y;
 float tempC;
 float tempF;
@@ -73,7 +75,7 @@ myServo.attach(SERVOPIN);
 onOff = false;
 myServo.write(ANGLE1);
 x = 0;
-photoSum = 0;
+lastSecond = 0;
 
 }
 
@@ -171,7 +173,14 @@ if(!rain){
 }
 if(rainTimer.isTimerReady()){
   rain = false;
-  myServo.write(ANGLE1);
+  currentTime = millis();
+  if(lastSecond == 0){
+    lastSecond = millis();
+  }
+  if(currentTime - lastSecond > 1000){
+    myServo.write(ANGLE1);
+    lastSecond = millis();
+  }
 }
 
 }
