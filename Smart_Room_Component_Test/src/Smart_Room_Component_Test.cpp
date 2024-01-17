@@ -6,7 +6,7 @@
  */
 
 #include "Particle.h"
-const int TESTPIN = D15;
+const int TESTPIN = D16;
 bool test;
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
