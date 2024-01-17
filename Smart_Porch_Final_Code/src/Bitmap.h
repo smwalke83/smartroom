@@ -1,24 +1,3 @@
-/* 
- * Project OLED and BME
- * Author: Scott Walker
- * Date: 
- */
-
-#include "Particle.h"
-#include "Adafruit_BME280.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_SSD1306.h"
-const int OLED_RESET = -1;
-const int OLEDADDRESS = 0x3C;
-const int BMEADDRESS = 0x76;
-const int DEGREE = 0xF8;
-float tempC;
-float tempF;
-float pressPA;
-float pressHG;
-float humidRH;
-Adafruit_BME280 bme;
-Adafruit_SSD1306 display(OLED_RESET);
 static const unsigned char RAINCOATBMP[] =
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -214,42 +193,3 @@ static const unsigned char STORMCLOUDBMP[] =
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-SYSTEM_MODE(SEMI_AUTOMATIC);
-
-void setup() {
-
-display.begin(SSD1306_SWITCHCAPVCC, OLEDADDRESS);
-display.clearDisplay();
-display.display();
-Serial.begin(9600);
-waitFor(Serial.isConnected, 10000);
-bme.begin(BMEADDRESS);
-
-}
-
-void loop() {
-
-tempC = bme.readTemperature();
-pressPA = bme.readPressure();
-humidRH = bme.readHumidity();
-tempF = (9.0/5.0)*tempC + 32;
-pressHG = pressPA/3386.0;
-display.clearDisplay();
-// display.drawBitmap(32, 0, STORMCLOUDBMP, 128, 64, 1);
-display.fillCircle(96, 32, 5, WHITE);
-display.drawLine(96, 22, 96, 17, WHITE); // line 241-248 sun bitmap
-display.drawLine(96, 42, 96, 47, WHITE);
-display.drawLine(106, 32, 111, 32, WHITE);
-display.drawLine(86, 32, 81, 32, WHITE);
-display.drawLine(103, 39, 106, 42, WHITE);
-display.drawLine(103, 25, 106, 22, WHITE);
-display.drawLine(89, 25, 86, 22, WHITE);
-display.drawLine(89, 39, 86, 42, WHITE);
-display.setTextSize(1);
-display.setTextColor(WHITE);
-display.setCursor(5, 10);
-display.printf("T: %0.2f%cF\n\n P: %0.0finHG\n\n H: %0.2f%%", tempF, DEGREE, pressHG, humidRH);
-display.display();
-
-}
