@@ -100,10 +100,10 @@ bool setHue(int lightNum, bool HueOn, int HueColor, int HueBright, int HueSat) {
       HueClient.println("Content-Type: text/plain;charset=UTF-8");
       HueClient.println();  // blank line before body
       HueClient.println(command);  // Hue command
-      HueClient.readString();
+      //HueClient.readString();
       // Serial.println("From Hue");
       // Serial.println(HueClient.readString()); // To close connection
-    HueClient.stop();
+    //HueClient.stop();
     return true;  // command executed
   }
   else
