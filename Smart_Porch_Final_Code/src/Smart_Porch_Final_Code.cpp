@@ -145,10 +145,10 @@ if(!manual){
     rain = true;
     rainTimer.startTimer(10000);
   }
-  if(tempF > 75.0){
+  if(tempF > 70.0){
     hot = true;
   }
-  if(tempF <= 75.0){
+  if(tempF <= 70.0){
     hot = false;
   }
   if(rain){
@@ -281,6 +281,14 @@ if(manual){
       setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
+    if(!wemo1On){
+      wemo1.wemoWrite(HIGH);
+      wemo1On = true;
+    }
+    if(wemo2On){
+      wemo2.wemoWrite(LOW);
+      wemo2On = false;
+    }
   }
   if(manualModes[z%6] == 2){
     display.clearDisplay();
@@ -298,6 +306,14 @@ if(manual){
     if(hueisOn == false){
       setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
+    }
+    if(wemo1On){
+      wemo1.wemoWrite(LOW);
+      wemo1On = false;
+    }
+    if(!wemo2On){
+      wemo2.wemoWrite(HIGH);
+      wemo2On = true;
     }
   }
   if(manualModes[z%6] == 3){
@@ -327,6 +343,14 @@ if(manual){
       setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
+    if(!wemo1On){
+      wemo1.wemoWrite(HIGH);
+      wemo1On = true;
+    }
+    if(wemo2On){
+      wemo2.wemoWrite(LOW);
+      wemo2On = false;
+    }
   }
   if(manualModes[z%6] == 4){
     if(wiperTimer.isTimerReady()){
@@ -354,6 +378,14 @@ if(manual){
     if(hueisOn == false){
       setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
+    }
+    if(wemo1On){
+      wemo1.wemoWrite(LOW);
+      wemo1On = false;
+    }
+    if(!wemo2On){
+      wemo2.wemoWrite(HIGH);
+      wemo2On = true;
     }
   }
   if(manualModes[z%6] == 5){
