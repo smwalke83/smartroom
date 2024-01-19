@@ -68,7 +68,6 @@ Adafruit_NeoPixel pixel(PIXELCOUNT, SPI1, WS2812B);
 Servo myServo;
 IoTTimer rainTimer;
 IoTTimer wiperTimer;
-IoTTimer hueTimer;
 IoTTimer motionTimer;
 Button blackButton(BLACKBUTTONPIN);
 Button greenButton(GREENBUTTONPIN);
@@ -136,7 +135,7 @@ if(!manual){                                                      // code for au
     //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-    setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+    //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
     hueisOn = true;
@@ -145,7 +144,7 @@ if(!manual){                                                      // code for au
     //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-    setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+    //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
     hueisOn = false;
@@ -264,7 +263,7 @@ if(manual){                                                       // increment m
       //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-      setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+      //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
       hueisOn = false;
@@ -295,7 +294,7 @@ if(manual){                                                       // increment m
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
@@ -326,7 +325,7 @@ if(manual){                                                       // increment m
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
@@ -340,7 +339,7 @@ if(manual){                                                       // increment m
       wemo2On = true;
     }
   }
-  if(manualModes[z%6] == 3){                                      // manual mode 4 - hot, wet w/ fan
+  if(manualModes[z%6] == 3){                                      // manual mode 4 - hot/wet w/ fan
     if(wiperTimer.isTimerReady()){
       onOff = !onOff;
       wiperTimer.startTimer(1000);
@@ -367,7 +366,7 @@ if(manual){                                                       // increment m
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
@@ -381,7 +380,7 @@ if(manual){                                                       // increment m
       wemo2On = false;
     }
   }
-  if(manualModes[z%6] == 4){                                         // manual mode 5 - cold, wet w/ heater
+  if(manualModes[z%6] == 4){                                         // manual mode 5 - cold/wet w/ heater
     if(wiperTimer.isTimerReady()){
       onOff = !onOff;
       wiperTimer.startTimer(1000);
@@ -408,7 +407,7 @@ if(manual){                                                       // increment m
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
@@ -442,7 +441,7 @@ if(manual){                                                       // increment m
         //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-        setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+        //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
         hueisOn = false;
@@ -467,7 +466,7 @@ if(manual){                                                       // increment m
         //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-        setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+        //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
         hueisOn = true;
