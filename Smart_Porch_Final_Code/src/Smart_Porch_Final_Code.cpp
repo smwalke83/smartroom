@@ -1,7 +1,7 @@
 /* 
  * Project Smart Porch
  * Author: Scott Walker
- * Date: 
+ * Date: 1/19/2024
  */
 
 #include "Particle.h"             // header files
@@ -28,8 +28,8 @@ const int OLED_RESET = -1;        // lines 27-30 are constants for the BME and O
 const int OLEDADDRESS = 0x3C;
 const int BMEADDRESS = 0x76;
 const int DEGREE = 0xF8;
-const int WEMO1 = 1;              // lines 31-41 are wemo and hue constants
-const int WEMO2 = 0;
+const int WEMO1 = 3;              // lines 31-41 are wemo and hue constants
+const int WEMO2 = 4;
 const int BULB1 = 1;
 const int BULB2 = 2;
 const int BULB3 = 3;
@@ -94,7 +94,7 @@ pinMode(PHOTOSENSOR, INPUT);
 pinMode(MOTIONPIN, INPUT);
 myServo.attach(SERVOPIN);                               // servo setup
 myServo.write(ANGLE1);
-x = 0;                                                  // setting bools and variables
+x = 0;                                                  // presetting bools and variables
 z = 0;
 lastSecond = 0;
 onOff = false;
@@ -107,7 +107,7 @@ manual = false;
 
 void loop() {
 
-motion = digitalRead(MOTIONPIN);
+motion = digitalRead(MOTIONPIN);                        // assigning variables for the loop
 tempC = bme.readTemperature();
 pressPA = bme.readPressure();
 humidRH = bme.readHumidity();
@@ -126,41 +126,41 @@ if(neoBrightness < 0){
   neoBrightness = 0;
 }
 pixel.setBrightness(neoBrightness);
-if(!manual){
+if(!manual){                                                      // code for auto mode, lighting pixels first
   pixel.clear();
   for(n = 0; n < PIXELCOUNT; n++){
     pixel.setPixelColor(n, neoColors[neoColorTemp]);
   }
   pixel.show();
-  if(hueisOn == false && photoAVG < 30){
+  if(hueisOn == false && photoAVG < 30){                          // turning the hue on/off based on ambient light, bulbs not in use will be commented out
     //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-    //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+    setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
     //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-    setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+    //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
     hueisOn = true;
   }
   if(hueisOn == true && photoAVG >= 30){
     //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-    //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+    setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
     //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
-    setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
+    //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
     hueisOn = false;
   }
-  if(digitalRead(RAINSENSOR)){
+  if(digitalRead(RAINSENSOR)){                                    // determining whether it's in rain mode or not
     rain = true;
     rainTimer.startTimer(10000);
   }
-  if(tempF > 75.0){
+  if(tempF > 75.0){                                               // determining whether it's in warm or cold mode
     hot = true;
   }
   if(tempF <= 75.0){
     hot = false;
   }
-  if(rain){
+  if(rain){                                                       // what to do in rain mode (windshied wipers)
     if(wiperTimer.isTimerReady()){
       onOff = !onOff;
       wiperTimer.startTimer(1000);
@@ -171,7 +171,7 @@ if(!manual){
     if(!onOff){
       myServo.write(ANGLE1);
     }
-    if(hot){
+    if(hot){                                                      // what to display in rain mode (warm)
       display.clearDisplay();
       display.drawBitmap(32, 0, STORMCLOUDBMP, 128, 64, 1);
       display.setTextSize(1);
@@ -180,7 +180,7 @@ if(!manual){
       display.printf("T: %0.2f%cF\n\n P: %0.0finHG\n\n H: %0.2f%%", tempF, DEGREE, pressHG, humidRH);
       display.display();
     }
-    if(!hot){
+    if(!hot){                                                     // what to display in rain mode (cold)
       display.clearDisplay();
       display.drawBitmap(32, 0, SNOWFLAKEBMP, 128, 64, 1);
       display.setTextSize(1);
@@ -190,8 +190,8 @@ if(!manual){
       display.display();
     }
   }
-  if(!rain){
-    if(hot){
+  if(!rain){                                                      // what to do in dry mode (no wipers)
+    if(hot){                                                      // display for warm/dry
       display.clearDisplay();
       display.fillCircle(96, 32, 5, WHITE);
       display.drawLine(96, 22, 96, 17, WHITE);
@@ -208,7 +208,7 @@ if(!manual){
       display.printf("T: %0.2f%cF\n\n P: %0.0finHG\n\n H: %0.2f%%", tempF, DEGREE, pressHG, humidRH);
       display.display();
     }
-    if(!hot){
+    if(!hot){                                                     // display for cold/dry
       display.clearDisplay();
       display.drawBitmap(32, 0, RAINCOATBMP, 128, 64, 1);
       display.setTextSize(1);
@@ -218,7 +218,7 @@ if(!manual){
       display.display();
     }
   }
-  if(rainTimer.isTimerReady()){
+  if(rainTimer.isTimerReady()){                                   // exiting rain mode and resetting wipers
     rain = false;
     currentTime = millis();
     if(lastSecond == 0){
@@ -229,15 +229,15 @@ if(!manual){
       lastSecond = millis();
     }
   }
-  if(tempF > 80 && !wemo1On){
+  if(tempF > 80 && !wemo1On){                                     // when to turn on the fan
     wemo1.wemoWrite(HIGH);
     wemo1On = true;
   }
-  if(tempF < 70 && !wemo2On){
+  if(tempF < 70 && !wemo2On){                                     // when to turn on the heat
     wemo2.wemoWrite(HIGH);
     wemo2On = true;
   }
-  if(tempF <= 80 && tempF >= 70){
+  if(tempF <= 80 && tempF >= 70){                                 // when to turn off fan and heat
     if(wemo1On){
       wemo1.wemoWrite(LOW);
       wemo1On = false;
@@ -248,13 +248,13 @@ if(!manual){
     }
   }
 }
-if(blackButton.isClicked())
+if(blackButton.isClicked())                                       // enter manual mode
   manual = !manual;
-if(manual){
+if(manual){                                                       // increment manual settings
   if(greenButton.isClicked()){
     z++;
   }
-  if(manualModes[z%6] == 0){
+  if(manualModes[z%6] == 0){                                      // manual mode 1 - all off
     display.clearDisplay();
     display.display();
     pixel.clear();
@@ -264,13 +264,13 @@ if(manual){
       //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-      //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+      setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
       //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
-      setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
+      //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
       hueisOn = false;
     }
   }
-  if(manualModes[z%6] == 1){
+  if(manualModes[z%6] == 1){                                      // manual mode 2 - hot/dry w/ fan
     display.clearDisplay();
     display.fillCircle(96, 32, 5, WHITE);
     display.drawLine(96, 22, 96, 17, WHITE);
@@ -295,9 +295,9 @@ if(manual){
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
     if(!wemo1On){
@@ -309,7 +309,7 @@ if(manual){
       wemo2On = false;
     }
   }
-  if(manualModes[z%6] == 2){
+  if(manualModes[z%6] == 2){                                      // manual mode 3 - cold/dry, w/ heat
     display.clearDisplay();
     display.drawBitmap(32, 0, RAINCOATBMP, 128, 64, 1);
     display.setTextSize(1);
@@ -326,9 +326,9 @@ if(manual){
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
     if(wemo1On){
@@ -340,7 +340,7 @@ if(manual){
       wemo2On = true;
     }
   }
-  if(manualModes[z%6] == 3){
+  if(manualModes[z%6] == 3){                                      // manual mode 4 - hot, wet w/ fan
     if(wiperTimer.isTimerReady()){
       onOff = !onOff;
       wiperTimer.startTimer(1000);
@@ -367,9 +367,9 @@ if(manual){
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
     if(!wemo1On){
@@ -381,7 +381,7 @@ if(manual){
       wemo2On = false;
     }
   }
-  if(manualModes[z%6] == 4){
+  if(manualModes[z%6] == 4){                                         // manual mode 5 - cold, wet w/ heater
     if(wiperTimer.isTimerReady()){
       onOff = !onOff;
       wiperTimer.startTimer(1000);
@@ -408,9 +408,9 @@ if(manual){
       //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-      //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+      setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
       //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-      setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+      //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
       hueisOn = true;
     }
     if(wemo1On){
@@ -422,7 +422,7 @@ if(manual){
       wemo2On = true;
     }
   }
-  if(manualModes[z%6] == 5){
+  if(manualModes[z%6] == 5){                                        // manual mode 6 - motion lights
     motion = digitalRead(MOTIONPIN);
     if(!motion && motionTimer.isTimerReady()){
       display.clearDisplay();
@@ -442,9 +442,9 @@ if(manual){
         //setHue(BULB1, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB2, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB3, LOW, hueColor, hueBrightness, saturation);
-        //setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
+        setHue(BULB4, LOW, hueColor, hueBrightness, saturation);
         //setHue(BULB5, LOW, hueColor, hueBrightness, saturation);
-        setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
+        //setHue(BULB6, LOW, hueColor, hueBrightness, saturation);
         hueisOn = false;
       }
     }
@@ -467,9 +467,9 @@ if(manual){
         //setHue(BULB1, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB2, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB3, HIGH, hueColor, hueBrightness, saturation);
-        //setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
+        setHue(BULB4, HIGH, hueColor, hueBrightness, saturation);
         //setHue(BULB5, HIGH, hueColor, hueBrightness, saturation);
-        setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
+        //setHue(BULB6, HIGH, hueColor, hueBrightness, saturation);
         hueisOn = true;
       }
       myServo.write(ANGLE1);
